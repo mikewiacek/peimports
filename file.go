@@ -75,6 +75,12 @@ func NewFile(r io.ReaderAt) (*File, error) {
 	}
 
 	var err error
+	// Read string table.
+	f.StringTable, err = readStringTable(&f.FileHeader, sr)
+	if err != nil {
+		return nil, err
+	}
+
 	// Seek past file header.
 	if _, err := sr.Seek(base+int64(binary.Size(f.FileHeader)), seekStart); err != nil {
 		return nil, err
